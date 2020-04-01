@@ -97,5 +97,5 @@ module.exports = {
    ** Server middleware configuration
    ** See https://nuxtjs.org/api/configuration-servermiddleware
    */
-  serverMiddlware: ['~/api/index.ts'],
+  serverMiddleware: ['~/api/index.ts'],
 }
