@@ -1,0 +1,12 @@
+@import '~bulma-extensions/dist/css/bulma-extensions.min';
+
+$fa-font-path: '~@fortawesome/fontawesome-free/webfonts' !default;
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}

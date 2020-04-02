@@ -23,11 +23,11 @@ module.exports = {
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['~/assets/scss/app.scss'],
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~plugins/axios-accessor'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -47,6 +47,8 @@ module.exports = {
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
+    // Doc: https://auth.nuxtjs.org/
+    '@nuxtjs/auth',
   ],
   /*
    ** Axios module configuration
@@ -98,4 +100,12 @@ module.exports = {
    ** See https://nuxtjs.org/api/configuration-servermiddleware
    */
   serverMiddleware: ['~/api/index.ts'],
+
+  /*
+   ** Router configuration
+   ** See https://nuxtjs.org/guide/routing
+   */
+  router: {
+    middleware: ['installed', 'auth'],
+  },
 }
