@@ -2,7 +2,7 @@
   <div id="install" class="has-background-primary">
     <div class="section">
       <h1 class="title is-1 has-text-centered">Install</h1>
-      <form>
+      <form @submit.prevent="install">
         <div class="columns">
           <div class="column is-5 is-12-mobile">
             <h3 class="subtitle is-3 has-text-weight-light">Admin account</h3>
@@ -11,6 +11,7 @@
               <div class="control has-icons-left">
                 <input
                   id="admin_name"
+                  v-model="form.admin_name"
                   type="text"
                   name="admin_name"
                   class="input"
@@ -19,6 +20,9 @@
                   <i class="fas fa-user"></i>
                 </span>
               </div>
+              <p v-if="errors.admin_name" class="help">
+                {{ errors.admin_name.errorKey }}
+              </p>
             </div>
 
             <div class="field">
@@ -26,6 +30,7 @@
               <div class="control has-icons-left">
                 <input
                   id="admin_password"
+                  v-model="form.admin_password"
                   type="password"
                   name="admin_password"
                   class="input"
@@ -34,6 +39,9 @@
                   <i class="fas fa-lock"></i>
                 </span>
               </div>
+              <p v-if="errors.admin_password" class="help">
+                {{ errors.admin_password.errorKey }}
+              </p>
             </div>
 
             <div class="field">
@@ -43,6 +51,7 @@
               <div class="control has-icons-left">
                 <input
                   id="admin_confirmation"
+                  v-model="form.admin_confirmation"
                   type="password"
                   name="admin_confirmation"
                   class="input"
@@ -51,6 +60,9 @@
                   <i class="fas fa-lock"></i>
                 </span>
               </div>
+              <p v-if="errors.admin_confirmation" class="help">
+                {{ errors.admin_confirmation.errorKey }}
+              </p>
             </div>
           </div>
 
@@ -61,11 +73,20 @@
             <div class="field">
               <label for="db_name" class="label">Database name</label>
               <div class="control has-icons-left">
-                <input id="db_name" type="text" name="db_name" class="input" />
+                <input
+                  id="db_name"
+                  v-model="form.db_name"
+                  type="text"
+                  name="db_name"
+                  class="input"
+                />
                 <span class="icon is-small is-left">
                   <i class="fas fa-database"></i>
                 </span>
               </div>
+              <p v-if="errors.db_name" class="help">
+                {{ errors.db_name.errorKey }}
+              </p>
             </div>
 
             <div class="field">
@@ -83,6 +104,9 @@
                   </span>
                 </div>
               </div>
+              <p v-if="errors.db_type" class="help">
+                {{ errors.db_type.errorKey }}
+              </p>
             </div>
 
             <transition-group name="fade">
@@ -92,6 +116,7 @@
                   <div class="control has-icons-left">
                     <input
                       id="db_host"
+                      v-model="form.db_host"
                       type="text"
                       name="db_host"
                       class="input"
@@ -100,6 +125,9 @@
                       <i class="fas fa-server"></i>
                     </span>
                   </div>
+                  <p v-if="errors.db_host" class="help">
+                    {{ errors.db_host.errorKey }}
+                  </p>
                 </div>
 
                 <div class="field">
@@ -107,6 +135,7 @@
                   <div class="control has-icons-left">
                     <input
                       id="db_user"
+                      v-model="form.db_user"
                       type="text"
                       name="db_user"
                       class="input"
@@ -115,6 +144,9 @@
                       <i class="fas fa-user"></i>
                     </span>
                   </div>
+                  <p v-if="errors.db_user" class="help">
+                    {{ errors.db_user.errorKey }}
+                  </p>
                 </div>
 
                 <div class="field">
@@ -124,6 +156,7 @@
                   <div class="control has-icons-left">
                     <input
                       id="db_password"
+                      v-model="form.db_password"
                       type="password"
                       name="db_password"
                       class="input"
@@ -132,6 +165,9 @@
                       <i class="fas fa-lock"></i>
                     </span>
                   </div>
+                  <p v-if="errors.db_password" class="help">
+                    {{ errors.db_password.errorKey }}
+                  </p>
                 </div>
               </div>
             </transition-group>
@@ -159,10 +195,54 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
 
+interface ValidationError {
+  [keys: string]: {
+    message: string
+    errorKey: string
+  }
+}
+
 @Component
 export default class Install extends Vue {
+  loading() {
+    return {
+      color: 'white',
+    }
+  }
+
   form = {
+    admin_name: '',
+    admin_password: '',
+    admin_confirmation: '',
+    db_name: '',
     db_type: 'sqlite',
+    db_host: '',
+    db_user: '',
+    db_password: '',
+  }
+
+  errors: ValidationError = {}
+
+  install() {
+    this.$axios
+      .post('/api/config/install', this.form)
+      .then((response) => {
+        // eslint-disable-next-line no-console
+        console.log(response)
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log('test', error, error.response)
+
+        switch (error.response.status) {
+          case 400:
+            this.errors = Object.assign(
+              {},
+              this.errors,
+              error.response.data.errors
+            )
+        }
+      })
   }
 }
 </script>

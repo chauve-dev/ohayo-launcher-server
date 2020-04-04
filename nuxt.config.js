@@ -1,3 +1,6 @@
+const fs = require('fs')
+const path = require('path')
+
 module.exports = {
   mode: 'universal',
   /*
@@ -19,7 +22,10 @@ module.exports = {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: {
+    color: '#00d1b2',
+    error: '#f14668',
+  },
   /*
    ** Global CSS
    */
@@ -107,5 +113,22 @@ module.exports = {
    */
   router: {
     middleware: ['installed', 'auth'],
+  },
+
+  /*
+   ** I18N configuration
+   ** See https://nuxt-community.github.io/nuxt-i18n
+   */
+  i18n: {
+    locales: () => {
+      return fs
+        .readFileSync(path.resolve(__dirname, './assets/lang'))
+        .filter((file) => /^[^.]+(.json)$/.test(file))
+    },
+    defaultLocale: 'en',
+    vueI18nLoader: false,
+    lazy: true,
+    langDir: '~/assets/lang',
+    seo: true,
   },
 }
