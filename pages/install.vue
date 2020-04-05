@@ -1,13 +1,44 @@
 <template>
   <div id="install" class="has-background-primary">
     <div class="section">
-      <h1 class="title is-1 has-text-centered">Install</h1>
+      <h1 class="title is-1 has-text-centered">
+        {{ $t('pages.install.install') }}
+      </h1>
       <form @submit.prevent="install">
+        <div class="field is-grouped is-grouped-centered">
+          <div class="field">
+            <label for="language" class="label">
+              {{ $t('pages.install.languages') }}
+            </label>
+            <div class="control">
+              <div class="select is-primary is-rounded is-inverted is-outlined">
+                <select
+                  id="language"
+                  v-model="form.language"
+                  name="language"
+                  @change="$i18n.setLocale($event.target.value)"
+                >
+                  <option
+                    v-for="locale in availableLocales"
+                    :key="locale.code"
+                    :value="locale.code"
+                  >
+                    {{ locale.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="columns">
           <div class="column is-5 is-12-mobile">
-            <h3 class="subtitle is-3 has-text-weight-light">Admin account</h3>
+            <h3 class="subtitle is-3 has-text-weight-light">
+              {{ $t('pages.install.account_name') }}
+            </h3>
             <div class="field">
-              <label for="admin_name" class="label">Admin name</label>
+              <label for="admin_name" class="label">
+                {{ $t('pages.install.account_name') }}
+              </label>
               <div class="control has-icons-left">
                 <input
                   id="admin_name"
@@ -26,7 +57,9 @@
             </div>
 
             <div class="field">
-              <div class="label" for="admin_password">Admin Password</div>
+              <div class="label" for="admin_password">
+                {{ $t('pages.install.account_password') }}
+              </div>
               <div class="control has-icons-left">
                 <input
                   id="admin_password"
@@ -46,7 +79,7 @@
 
             <div class="field">
               <div class="label" for="admin_confirmation">
-                Admin Confirmation
+                {{ $t('pages.install.admin_confirmation') }}
               </div>
               <div class="control has-icons-left">
                 <input
@@ -69,9 +102,13 @@
           <div class="is-divider-vertical is-hidden-mobile"></div>
 
           <div class="column is-5 is-12-mobile">
-            <h3 class="subtitle is-3 has-text-weight-light">Database</h3>
+            <h3 class="subtitle is-3 has-text-weight-light">
+              {{ $t('pages.install.database') }}
+            </h3>
             <div class="field">
-              <label for="db_name" class="label">Database name</label>
+              <label for="db_name" class="label">
+                {{ $t('pages.install.database') }}
+              </label>
               <div class="control has-icons-left">
                 <input
                   id="db_name"
@@ -90,14 +127,18 @@
             </div>
 
             <div class="field">
-              <label for="db_type" class="label">Database Type</label>
+              <label for="db_type" class="label">
+                {{ $t('pages.install.db_type') }}
+              </label>
               <div class="control has-icons-left">
                 <div class="select is-fullwidth">
                   <select id="db_type" v-model="form.db_type" name="db_type">
+                    {{ /* eslint-disable vue-i18n/no-raw-text */ }}
                     <option value="sqlite">SQLite</option>
                     <option value="mysql">MySQL/MariaDB</option>
                     <option value="psql">PostgreSQL</option>
                     <option value="mssql">Microsoft Server SQL</option>
+                    {{ /* eslint-enable vue-i18n/no-raw-text */ }}
                   </select>
                   <span class="icon is-small is-left">
                     <i class="fas fa-database"></i>
@@ -112,7 +153,9 @@
             <transition-group name="fade">
               <div v-if="form.db_type !== 'sqlite'" key="not_sqlite">
                 <div class="field">
-                  <label for="db_user" class="label">Database host</label>
+                  <label for="db_user" class="label">
+                    {{ $t('pages.install.db_host') }}
+                  </label>
                   <div class="control has-icons-left">
                     <input
                       id="db_host"
@@ -131,7 +174,9 @@
                 </div>
 
                 <div class="field">
-                  <label for="db_user" class="label">Database user</label>
+                  <label for="db_user" class="label">
+                    {{ $t('pages.install.db_user') }}
+                  </label>
                   <div class="control has-icons-left">
                     <input
                       id="db_user"
@@ -151,7 +196,7 @@
 
                 <div class="field">
                   <div class="label" for="db_password">
-                    Database Password
+                    {{ $t('pages.install.db_password') }}
                   </div>
                   <div class="control has-icons-left">
                     <input
@@ -183,7 +228,7 @@
               <i class="fas fa-cogs"></i>
             </span>
             <span>
-              Install
+              {{ $t('pages.install.install_btn') }}
             </span>
           </button>
         </div>
@@ -194,6 +239,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
+import { Context } from '@nuxt/types'
 
 interface ValidationError {
   [keys: string]: {
@@ -210,6 +256,13 @@ export default class Install extends Vue {
     }
   }
 
+  asyncData({ app }: Context) {
+    return {
+      availableLocales: app.i18n.locales,
+      currentLocale: app.i18n.locale,
+    }
+  }
+
   form = {
     admin_name: '',
     admin_password: '',
@@ -219,6 +272,7 @@ export default class Install extends Vue {
     db_host: '',
     db_user: '',
     db_password: '',
+    language: 'en',
   }
 
   errors: ValidationError = {}

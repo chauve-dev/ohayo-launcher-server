@@ -1,6 +1,3 @@
-const fs = require('fs')
-const path = require('path')
-
 module.exports = {
   mode: 'universal',
   /*
@@ -55,6 +52,7 @@ module.exports = {
     '@nuxtjs/dotenv',
     // Doc: https://auth.nuxtjs.org/
     '@nuxtjs/auth',
+    'nuxt-i18n',
   ],
   /*
    ** Axios module configuration
@@ -120,15 +118,26 @@ module.exports = {
    ** See https://nuxt-community.github.io/nuxt-i18n
    */
   i18n: {
-    locales: () => {
-      return fs
-        .readFileSync(path.resolve(__dirname, './assets/lang'))
-        .filter((file) => /^[^.]+(.json)$/.test(file))
-    },
     defaultLocale: 'en',
-    vueI18nLoader: false,
-    lazy: true,
-    langDir: '~/assets/lang',
     seo: true,
+    locales: [
+      {
+        code: 'fr',
+        iso: 'fr-FR',
+        name: 'Français',
+      },
+      {
+        code: 'en',
+        iso: 'en-US',
+        name: 'English',
+      },
+    ],
+    vueI18n: {
+      fallbackLocale: 'en',
+      messages: {
+        fr: require('./lang/fr-FR.json'),
+        en: require('./lang/en-US.json'),
+      },
+    },
   },
 }

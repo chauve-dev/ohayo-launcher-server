@@ -1,0 +1,19 @@
+{
+  "app-name": "Ohayo Launcher Server",
+  "app-description": "Serveur de configuration pour le launcher Minecraft ohayo",
+  "pages": {
+    "install": {
+      "install": "Installation",
+      "account_name": "Nom du compte",
+      "account_password": "Mot de passe du compte",
+      "admin_confirmation": "Confirmation du mot de passe",
+      "database": "Base de donnÃ©e",
+      "db_type": "Type de base de donnÃ©e",
+      "db_host": "Hôte de la base de donnée",
+      "db_user": "Utilisateur de la base de donnée",
+      "db_password": "Mot de passe de la base de donnée",
+      "install_btn": "Installer",
+      "languages": "Langues"
+    }
+  }
+}
